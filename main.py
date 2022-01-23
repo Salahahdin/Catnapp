@@ -1,12 +1,47 @@
-import sys
-import os
-from PyQt6.QtGui import QGuiApplication
-from PyQt6.QtQml import QQmlApplicationEngine
-from PyQt6.QtQuick import QQuickWindow
 
-QQuickWindow.setSceneGraphBackend('software')
-app = QGuiApplication(sys.argv)
-engine = QQmlApplicationEngine()
-engine.quit.connect(app.quit)
-engine.load('./UI/main.qml')
-sys.exit(app.exec())
+
+import sys
+from PyQt6.QtWidgets import QMainWindow, QApplication
+from PyQt6.QtGui import QIcon, QAction
+
+
+class Example(QMainWindow):
+
+    def __init__(self):
+        super().__init__()
+
+        self.initUI()
+
+
+    def initUI(self):
+
+        exitAct = QAction(QIcon('exit.png'), '&Exit', self)
+        exitAct.setShortcut('Ctrl+Q')
+        exitAct.setStatusTip('Exit application')
+
+        addCat = QAction(QIcon('adcat.png'), '&Add Cat', self)
+        addCat.setShortcut('Ctrl+Q')
+        addCat.setStatusTip('Add Cat')
+        addCat.triggered.connect(QApplication.instance().quit)
+
+        self.statusBar()
+
+        menubar = self.menuBar()
+        fileMenu = menubar.addMenu('&File')
+        fileMenu.addAction(exitAct)
+        fileMenu.addAction(addCat)
+
+        self.setGeometry(300, 300, 350, 250)
+        self.setWindowTitle('Simple menu')
+        self.show()
+
+
+def main():
+
+    app = QApplication(sys.argv)
+    ex = Example()
+    sys.exit(app.exec())
+
+
+if __name__ == '__main__':
+    main()
