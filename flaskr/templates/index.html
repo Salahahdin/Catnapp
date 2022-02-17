@@ -1,0 +1,39 @@
+
+{% extends 'layout.html' %}
+{% block title %}Random Cat Facts{% endblock %}
+{% block content %}
+<img src="{{ url_for('static', filename='images/icons8-cat-50.png') }}" alt="cat icon" />
+<h1>Random Cat Facts</h1>
+<p id="cat-fact"></p>
+<button id="next-button" onclick="fetchCatFact()">Next</button>
+<br />
+<a href="https://github.com/alexwohlbruck/cat-facts" class="no-decoration" target="_blank" rel="noopener">Cat facts API by alexwohlbruck</a>
+<br />
+<a target="_blank" href="https://icons8.com/icons/set/cat">Cat icon</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a>
+{% endblock %}
+
+{% block script %}
+<script>
+  const baseURL = window.location.href
+  const catFactP = document.getElementById("cat-fact")
+  const nextButton = document.getElementById("next-button")
+
+  const fetchCatFact = async () => {
+    try {
+      catFactP.innerHTML = "Loading..."
+      nextButton.disabled = true
+
+      const response = await fetch(`${baseURL}api/cats/`)
+      const json = await response.json()
+
+      catFactP.innerHTML = json.text
+      nextButton.disabled = false
+    }
+    catch {
+      catFactP.innerHTML = "Ouch! Something went wrong. Please reload the page."
+    }
+  }
+
+  fetchCatFact()
+</script>
+{% endblock %}
